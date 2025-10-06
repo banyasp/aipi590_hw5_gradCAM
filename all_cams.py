@@ -1,4 +1,4 @@
-# bult with claude sonnet 4.5, Oct 6 @ 8:40am
+# originally built with claude sonnet 4.5, Oct 6 @ 8:40am. iteratively improved with cursor (claude 4.5 sonnet-powered). see ./cursor_logs for details.
 # Optimized for faster ScoreCAM processing with parallel image processing
 
 from pytorch_grad_cam import GradCAM, GradCAMPlusPlus, ScoreCAM, EigenCAM
