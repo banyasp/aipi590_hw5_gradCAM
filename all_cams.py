@@ -26,7 +26,7 @@ def process_single_image(img_info):
     Worker function to process a single image with all CAM methods.
     This function will be called in parallel for each image.
     """
-    img_idx, total_imgs, emotion_folder, img_name = img_info
+    img_idx, total_imgs, img_name = img_info
     
     # Each worker initializes its own model and CAM instances
     # Note: For GPU, this will use the same GPU but different CUDA contexts
@@ -52,8 +52,8 @@ def process_single_image(img_info):
     print(f"Processing image {img_idx}/{total_imgs}: {img_name}")
     print(f"{'='*60}")
     
-    # Load and preprocess image
-    img = Image.open(f'emotion_dataset/{emotion_folder}/{img_name}.jpg').convert('RGB')
+    # Load and preprocess image from the data folder
+    img = Image.open(f'aipi590_hw5_gradCAM/data/{img_name}.jpg').convert('RGB')
     img_resized = img.resize((224, 224))
     img_array = np.array(img_resized) / 255.0
     img_tensor = transforms.ToTensor()(img_resized).unsqueeze(0).to(device)
@@ -102,21 +102,21 @@ def process_single_image(img_info):
     return img_name
 
 if __name__ == '__main__':
-    # List of images to process - add your image paths here
-    # Format: (emotion_folder, image_name)
+    # List of images to process - add your image names here
+    # Images are loaded from aipi590_hw5_gradCAM/data/
     img_list = [
-        # ('happy', 'happy_01932'),
-        # ('happy', 'happy_01419'),
-        # ('disgust', 'disgust_00024'),
-        # ('disgust', 'disgust_00045'),
-        # ('angry', 'angry_00009'),
-        # ('angry', 'angry_00021'),
-        # ('surprise', 'surprise_00007'),
-        ('surprise', 'surprise_00019'),
-        # ('sad', 'sad_00007'),
-        # ('sad', 'sad_00018'),
-        # ('neutral', 'neutral_00017'),
-        # ('neutral', 'neutral_00025')
+        'happy_01932',
+        'happy_01419',
+        'disgust_00024',
+        'disgust_00045',
+        'angry_00009',
+        'angry_00021',
+        'surprise_00007',
+        'surprise_00019',
+        'sad_00007',
+        'sad_00018',
+        'neutral_00017',
+        'neutral_00025'
     ]
     
     # Configure number of parallel workers
@@ -134,8 +134,8 @@ if __name__ == '__main__':
     
     # Prepare arguments for each worker (add index and total count)
     img_info_list = [
-        (idx, len(img_list), emotion_folder, img_name)
-        for idx, (emotion_folder, img_name) in enumerate(img_list, 1)
+        (idx, len(img_list), img_name)
+        for idx, img_name in enumerate(img_list, 1)
     ]
     
     # Process images in parallel using multiprocessing
